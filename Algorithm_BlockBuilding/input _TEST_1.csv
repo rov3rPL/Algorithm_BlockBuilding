@@ -1,0 +1,8 @@
+Code,StartTimeHour,StartTimeMinutes,EndTimeHour,EndTimeMinutes
+L,13,00,13,30
+T,13,00,13,30
+L,13,30,14,00
+L,14,00,14,30
+T,14,30,15,00
+P,15,00,15,20
+L,15,00,15,30
