@@ -66,9 +66,13 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="input _TEST_1.csv" />
-    <None Include="input.csv" />
+    <None Include="input.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="input_TEST_2.csv" />
-    <None Include="log4net.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

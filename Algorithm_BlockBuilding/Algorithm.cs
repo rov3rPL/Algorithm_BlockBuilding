@@ -25,9 +25,13 @@ namespace Algorithm_BlockBuilder
             return result;
         }
 
+        /// <summary>
+        /// Założenie: slots - posortowane po czasie rozpoczęcia
+        /// </summary>
+        /// <param name="slots"></param>
+        /// <returns></returns>
         private int?[][] GenerateMatrix(ServiceVariantSlot[] slots)
         {
-            //TODO:
             //slots - posortowane po czasie rozpoczęcia
             int?[][] matrix = new int?[slots.Length - 1][];
             for (int i = 0; i < matrix.Length; ++i)
@@ -37,11 +41,7 @@ namespace Algorithm_BlockBuilder
                 {
                     var SV1 = slots[i];
                     var SV2 = slots[i + j + 1];
-                    //if (SV1.Code == SV2.Code) //te same warianty
-                    //    matrix[i][j] = null;
                     var timeOffset = SV2.StartTime - SV1.EndTime;
-                    //if(timeOffset > maxTimeOffset)
-                    //    matrix[i][j] = null;
                     if (SV1.Code != SV2.Code && timeOffset >= 0)
                         matrix[i][j] = timeOffset;
                 }
@@ -54,7 +54,7 @@ namespace Algorithm_BlockBuilder
         {
             List<Block> listOfBlocks = new List<Block>();
 
-            //TODO: call it parallel
+            //TODO: call it parallel ?
             for (int b = 0; b < matrix.Length; ++b)
             {
                 var remainingServices = new HashSet<char>(allServices);
@@ -68,6 +68,8 @@ namespace Algorithm_BlockBuilder
                     var block = new Block();
                     block.ServiceVariantSlots = result.ToArray();
                     listOfBlocks.Add(block);
+                    if (block.SpareTime == 0)
+                        break;
                 }
             }
             
@@ -95,7 +97,7 @@ namespace Algorithm_BlockBuilder
                     return new List<ServiceVariantSlot>() { nextService };
                 }
                 ///
-                if (nextServiceIndex >= matrix.Length) //kiedy?
+                if (nextServiceIndex >= matrix.Length) //są jeszcze usługi do umówienia a nie ma już slotów
                 {
                     remainingServices.Add(nextService.Code);
                     return null;
@@ -111,28 +113,6 @@ namespace Algorithm_BlockBuilder
                     result.AddRange(remainingPart);
                     return result;
                 }
-                ///
-                ////PROBA #2
-                //result = new List<ServiceVariantSlot>() { nextService }; //dobieramy kolejną usługę w bloku
-                //if (remainingServices.Count == 0)
-                //    return result;        //pełny blok
-                //var remainingPart = search(matrix, startIndex + 1, remainingServices, slots);
-                //if(null == remainingPart) //musimy się wycofać
-                //{
-                //    remainingServices.Add(nextService.Code);
-                //    continue;
-                //}
-                //result.AddRange(remainingPart);
-
-
-                ////PROBA #1
-                //remainingServices.Remove(nextService.Code);
-
-                //result = search(matrix, startIndex+1, remainingServices, slots);
-                //result.Add(nextService); //dobieramy kolejną usługę w bloku
-
-                //if (remainingServices.Count == 0)
-                //    return result;        //pełny blok
             }
 
             return null;
